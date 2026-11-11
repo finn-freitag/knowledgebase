@@ -2,7 +2,7 @@ name: Docker images
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ["v*"]
     paths-ignore: ["extension/**", "**.md"]
   pull_request:

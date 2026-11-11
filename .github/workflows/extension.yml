@@ -2,7 +2,7 @@ name: Firefox extension
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ["v*"]
     paths: ["extension/**", "shared/**", ".github/workflows/extension.yml"]
   pull_request:
