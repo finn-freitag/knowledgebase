@@ -1,0 +1,28 @@
+.grid { display: grid; grid-template-columns: minmax(380px, 1fr) minmax(420px, 1.15fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+.sticky { position: sticky; top: 12px; }
+#map { height: 58vh; min-height: 360px; border-radius: 6px; border: 1px solid var(--border); }
+.dropzone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 18px; text-align: center; transition: .15s; }
+.dropzone.over { border-color: var(--accent); background: var(--accent-soft); }
+body.dragging .dropzone { border-color: var(--accent); }
+.cards { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.card { border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; }
+.card .thumb { width: 84px; height: 84px; object-fit: cover; border-radius: 4px; background: var(--bg); }
+.card .icon { font-size: 26px; width: 40px; text-align: center; }
+.card input, .card textarea { margin-bottom: 4px; }
+.card textarea { min-height: 44px; }
+.card .meta { font-size: 12.5px; color: var(--muted); }
+.card .meta.err { color: var(--danger); }
+.card .side { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.georef-ok { color: var(--accent); font-weight: 600; font-size: 12.5px; }
+#shapes { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.shape { display: grid; grid-template-columns: 24px 1fr 1.4fr auto auto; gap: 6px; align-items: center; }
+.shape .t { text-align: center; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal-box { background: var(--panel); border-radius: 10px; padding: 14px; width: min(1300px, 100%); height: min(900px, 100%); display: flex; flex-direction: column; }
+.modal-head { gap: 8px; }
+#georefMap { flex: 1; border-radius: 6px; border: 1px solid var(--border); }
+.georef-handle { background: #fff; border: 3px solid #1565c0; border-radius: 3px; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.georef-move { background: #1565c0; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.5); cursor: move; }
+.georef-label { font: 600 11px system-ui; color: #fff; text-shadow: 0 0 3px #000; white-space: nowrap; }

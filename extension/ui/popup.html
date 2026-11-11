@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="common.css">
+<style>
+  body { width: 280px; padding: 12px; }
+  .head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .head img { width: 22px; }
+  .btns { display: flex; flex-direction: column; gap: 6px; }
+  .btns button { justify-content: flex-start; width: 100%; }
+  #status { font-size: 12.5px; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="head"><img src="../icons/icon.svg" alt=""><strong>Knowledge base</strong></div>
+  <div class="btns">
+    <button class="primary" id="new">＋ Add information</button>
+    <button id="page">📄 Add this page</button>
+    <button id="review">📝 Review queue <span id="count" class="badge hidden"></span></button>
+    <button id="wiki">📚 Open wiki</button>
+    <button id="settings">⚙ Settings</button>
+  </div>
+  <div id="status" class="muted"></div>
+  <script src="../lib/api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

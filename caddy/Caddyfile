@@ -1,0 +1,33 @@
+# PKDB reverse proxy. Variables are prepared by /docker-entrypoint-pkdb.sh
+{
+	{$CADDY_GLOBAL}
+}
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	# API for the browser extension: always token-authenticated by the backend, never behind Authelia
+	handle /pkdb/api/* {
+		request_body {
+			max_size {$MAX_UPLOAD_MB}MB
+		}
+		reverse_proxy backend:8000
+	}
+
+	# Static assets of the map viewer (no secrets)
+	handle /pkdb/static/* {
+		reverse_proxy backend:8000
+	}
+
+	# Everything else (wiki + map embeds) – optionally protected by Authelia
+	handle {
+		route {
+			import /etc/caddy/auth/{$CADDY_AUTH}.caddy
+			@backend path /pkdb/*
+			reverse_proxy @backend backend:8000
+			reverse_proxy wiki:3000
+		}
+	}
+}
+
+import /etc/caddy/sites/{$CADDY_SITES}.caddy

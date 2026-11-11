@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PKDB settings</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  main { max-width: 720px; }
+  .engines { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px 12px; }
+  .engines label, .check { font-weight: 400; display: flex; gap: 6px; align-items: center; margin: 4px 0; }
+  details summary { cursor: pointer; color: var(--muted); margin-top: 10px; }
+</style>
+</head>
+<body>
+<header class="top"><img src="../icons/icon.svg" alt=""><h1>PKDB settings</h1>
+  <nav><a href="submit.html">Add information</a><a href="jobs.html">Review queue</a><a href="options.html" class="active">Settings</a></nav>
+</header>
+<main>
+  <section class="panel">
+    <h2>Server</h2>
+    <label for="server">Server URL <span class="hint">– the address of your wiki, e.g. https://wiki.example.com or http://192.168.1.20</span></label>
+    <input type="url" id="server" placeholder="https://wiki.example.com">
+    <div id="conn" class="msg hidden"></div>
+
+    <div id="loggedOut">
+      <h3 style="margin-top:14px">Log in with your wiki account</h3>
+      <label for="user">E-mail / user name</label>
+      <input type="text" id="user" autocomplete="username">
+      <label for="pass">Password</label>
+      <input type="password" id="pass" autocomplete="current-password">
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="login">Log in</button>
+      </div>
+      <details>
+        <summary>Use a static API token instead</summary>
+        <label for="token">API token <span class="hint">(from PKDB_API_TOKENS in .env)</span></label>
+        <input type="password" id="token">
+        <div class="row" style="margin-top:8px"><button id="saveToken">Save token</button></div>
+      </details>
+    </div>
+    <div id="loggedIn" class="hidden">
+      <p>Logged in as <b id="who"></b>.</p>
+      <div class="row"><button id="test">Test connection</button><button class="danger" id="logout">Log out</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Search integration</h2>
+    <p class="hint">Show knowledge base results on these search engines:</p>
+    <div class="engines" id="engines"></div>
+    <label for="max">Maximum results per type</label>
+    <input type="number" id="max" min="1" max="20" style="width:100px">
+    <label class="check"><input type="checkbox" id="autoMap"> Show the first matching map automatically</label>
+    <div class="row" style="margin-top:8px"><button id="saveSearch">Save</button><span id="saved" class="muted hidden">Saved ✓</span></div>
+  </section>
+</main>
+<script src="../lib/api.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

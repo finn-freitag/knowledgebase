@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map</title>
+<link rel="stylesheet" href="/pkdb/static/vendor/leaflet/leaflet.css">
+<style>
+  :root { --bg: #fff; --fg: #222; --muted: #666; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1e1e1e; --fg: #eee; --muted: #aaa; } }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #msg { padding: 1em; }
+  .pkdb-popup { font-size: 13px; }
+  .pkdb-desc { margin: 4px 0; white-space: pre-wrap; }
+  .pkdb-props { border-collapse: collapse; margin-top: 4px; }
+  .pkdb-props th, .pkdb-props td { text-align: left; padding: 1px 6px 1px 0; vertical-align: top; font-size: 12px; }
+  .pkdb-props th { color: #666; font-weight: 500; }
+  .pkdb-layername { color: #888; font-size: 11px; margin-top: 4px; }
+  #fs { position: absolute; z-index: 1000; left: 10px; bottom: 28px; background: #fff; border: 2px solid rgba(0,0,0,.2);
+        border-radius: 4px; padding: 3px 7px; font-size: 13px; cursor: pointer; color: #333; text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<a id="fs" href="" target="_blank" title="Open map in a new tab">⤢ Full screen</a>
+<script src="/pkdb/static/vendor/leaflet/leaflet.js"></script>
+<script src="/pkdb/static/pkdb-map.js"></script>
+<script>
+  (async function () {
+    const id = "__MAP_ID__";
+    document.getElementById("fs").href = "/pkdb/embed/map/" + id;
+    if (window.top === window.self) document.getElementById("fs").style.display = "none";
+    try {
+      const r = await fetch("/pkdb/embed/map/" + id + "/data", { credentials: "same-origin" });
+      if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+      const data = await r.json();
+      document.title = data.title || "Map";
+      await PKDBMap.render(document.getElementById("map"), data, { scrollWheelZoom: window.top === window.self });
+    } catch (e) {
+      document.getElementById("map").innerHTML = '<div id="msg">Could not load map: ' + PKDBMap.esc(e.message) + "</div>";
+    }
+  })();
+</script>
+</body>
+</html>

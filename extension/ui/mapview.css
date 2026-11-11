@@ -1,0 +1,3 @@
+html, body { height: 100%; background: transparent; }
+#map { position: absolute; inset: 0; border-radius: 8px; }
+#msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; color: var(--muted); }

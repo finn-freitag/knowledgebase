@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review queue – PKDB</title>
+<link rel="stylesheet" href="../vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="jobs.css">
+</head>
+<body>
+<header class="top"><img src="../icons/icon.svg" alt=""><h1>Review queue</h1>
+  <nav><a href="submit.html">Add information</a><a href="jobs.html" class="active">Review queue</a><a href="options.html">Settings</a></nav>
+</header>
+<main class="layout">
+  <aside class="panel list-panel">
+    <div class="row" style="margin-bottom:8px">
+      <select id="filter" class="grow">
+        <option value="">All submissions</option>
+        <option value="review">Waiting for review</option>
+        <option value="queued,processing,applying">In progress</option>
+        <option value="applied">Applied</option>
+        <option value="failed,rejected">Failed / rejected</option>
+      </select>
+      <button id="reload" class="small" title="Reload">⟳</button>
+    </div>
+    <div id="list"></div>
+  </aside>
+  <section id="detail" class="panel detail-panel"><p class="muted">Select a submission.</p></section>
+</main>
+<script src="../vendor/leaflet/leaflet.js"></script>
+<script src="../vendor/diff/diff.min.js"></script>
+<script src="../lib/api.js"></script>
+<script src="../lib/pkdb-map.js"></script>
+<script src="jobs.js"></script>
+</body>
+</html>

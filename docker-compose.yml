@@ -1,0 +1,102 @@
+# Personal Knowledge Database (PKDB)
+# Usage: download this file and .env.example, rename the latter to .env, edit it, then run `docker compose up -d`.
+name: pkdb
+
+x-restart: &restart
+  restart: unless-stopped
+
+services:
+  db:
+    <<: *restart
+    image: ${POSTGIS_IMAGE:-postgis/postgis:16-3.4}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pkdb}
+      POSTGRES_USER: ${POSTGRES_USER:-pkdb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pkdb} -d ${POSTGRES_DB:-pkdb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wiki:
+    <<: *restart
+    image: ${WIKIJS_IMAGE:-ghcr.io/requarks/wiki:2}
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER:-pkdb}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB:-pkdb}
+
+  backend:
+    <<: *restart
+    image: ghcr.io/${PKDB_IMAGE_OWNER:-finn-freitag}/pkdb-backend:${PKDB_VERSION:-latest}
+    depends_on:
+      db:
+        condition: service_healthy
+      wiki:
+        condition: service_started
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      WIKI_INTERNAL_URL: http://wiki:3000
+      DATA_DIR: /data
+    volumes:
+      - pkdb-data:/data
+    # Uncomment to reach a local LLM (e.g. Ollama) running on the Docker host via http://host.docker.internal:11434
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
+  proxy:
+    <<: *restart
+    image: ghcr.io/${PKDB_IMAGE_OWNER:-finn-freitag}/pkdb-proxy:${PKDB_VERSION:-latest}
+    depends_on:
+      - backend
+      - wiki
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    environment:
+      PKDB_HOST: ${PKDB_HOST:-}
+      AUTH_HOST: ${AUTH_HOST:-}
+      AUTH_MODE: ${AUTH_MODE:-builtin}
+      WIKI_PUBLIC: ${WIKI_PUBLIC:-false}
+      TLS_MODE: ${TLS_MODE:-}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-200}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+
+  # Only started when COMPOSE_PROFILES=authelia is set in .env (together with AUTH_MODE=authelia)
+  authelia:
+    <<: *restart
+    image: ghcr.io/${PKDB_IMAGE_OWNER:-finn-freitag}/pkdb-authelia:${PKDB_VERSION:-latest}
+    profiles: ["authelia"]
+    environment:
+      PKDB_HOST: ${PKDB_HOST:-}
+      AUTH_HOST: ${AUTH_HOST:-}
+      AUTH_COOKIE_DOMAIN: ${AUTH_COOKIE_DOMAIN:-}
+      AUTH_ADMIN_USER: ${AUTH_ADMIN_USER:-}
+      AUTH_ADMIN_PASSWORD: ${AUTH_ADMIN_PASSWORD:-}
+      AUTH_ADMIN_EMAIL: ${AUTH_ADMIN_EMAIL:-}
+      AUTH_POLICY: ${AUTH_POLICY:-one_factor}
+      AUTH_MANAGE_USERS: ${AUTH_MANAGE_USERS:-true}
+      TZ: ${TZ:-Europe/Berlin}
+    volumes:
+      - authelia-config:/config
+
+volumes:
+  db-data:
+  pkdb-data:
+  caddy-data:
+  caddy-config:
+  authelia-config:

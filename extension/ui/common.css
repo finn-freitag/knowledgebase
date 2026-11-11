@@ -1,0 +1,70 @@
+:root {
+  --bg: #f6f8f6; --panel: #ffffff; --fg: #1f2421; --muted: #5f6b62; --border: #d9e2db; --accent: #2f7d32;
+  --accent-fg: #fff; --accent-soft: #e8f5e9; --danger: #c62828; --warn: #ef6c00; --link: #1565c0;
+  --add: #e6f4ea; --add-fg: #1e5e2a; --del: #fdecea; --del-fg: #8e1c1c; --radius: 8px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161a17; --panel: #1f2420; --fg: #e6ebe7; --muted: #9aa69d; --border: #344038; --accent: #4caf50;
+    --accent-fg: #0d1f0e; --accent-soft: #233226; --link: #8ab4f8; --add: #183a22; --add-fg: #a5d6a7;
+    --del: #3d1c1c; --del-fg: #ef9a9a; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--link); }
+h1 { font-size: 20px; margin: 0; }
+h2 { font-size: 16px; margin: 0 0 8px 0; }
+h3 { font-size: 14px; margin: 0 0 6px 0; }
+header.top { display: flex; align-items: center; gap: 12px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--border); }
+header.top img { width: 26px; height: 26px; }
+header.top nav { display: flex; gap: 16px; margin-left: auto; }
+header.top nav a { text-decoration: none; color: var(--muted); font-weight: 500; }
+header.top nav a.active, header.top nav a:hover { color: var(--fg); }
+main { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+label { display: block; font-weight: 500; margin: 8px 0 3px 0; }
+label .hint, .hint { font-weight: 400; color: var(--muted); font-size: 12.5px; }
+input[type=text], input[type=url], input[type=password], input[type=number], textarea, select {
+  width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); font: inherit;
+}
+textarea { resize: vertical; min-height: 90px; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+button, .btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; text-decoration: none;
+}
+button:hover, .btn:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
+button.danger { color: var(--danger); }
+button.small { padding: 3px 9px; font-size: 12.5px; }
+button:disabled { opacity: .55; cursor: default; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.grow { flex: 1; }
+.muted { color: var(--muted); }
+.msg { padding: 9px 12px; border-radius: 6px; margin: 8px 0; }
+.msg.ok { background: var(--add); color: var(--add-fg); }
+.msg.err { background: var(--del); color: var(--del-fg); }
+.msg.info { background: var(--accent-soft); }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; background: var(--accent-soft); }
+.badge.review { background: #fff3e0; color: #a64b00; }
+.badge.failed, .badge.rejected { background: var(--del); color: var(--del-fg); }
+.badge.applied { background: var(--add); color: var(--add-fg); }
+.badge.processing, .badge.queued, .badge.applying { background: #e3f2fd; color: #0d47a1; }
+@media (prefers-color-scheme: dark) {
+  .badge.review { background: #4a2d0c; color: #ffcc80; }
+  .badge.processing, .badge.queued, .badge.applying { background: #0d2a4a; color: #90caf9; }
+}
+.hidden { display: none !important; }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Leaflet popups used by pkdb-map.js */
+.pkdb-popup { font-size: 13px; }
+.pkdb-desc { margin: 4px 0; white-space: pre-wrap; }
+.pkdb-props { border-collapse: collapse; margin-top: 4px; }
+.pkdb-props th, .pkdb-props td { text-align: left; padding: 1px 6px 1px 0; vertical-align: top; font-size: 12px; }
+.pkdb-props th { color: #666; font-weight: 500; }
+.pkdb-layername { color: #888; font-size: 11px; margin-top: 4px; }
+.leaflet-container { font: inherit; }

@@ -1,0 +1,4 @@
+# Authelia login portal
+{$AUTH_HOST} {
+	reverse_proxy authelia:9091
+}

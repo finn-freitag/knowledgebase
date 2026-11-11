@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add information – PKDB</title>
+<link rel="stylesheet" href="../vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="../vendor/geoman/leaflet-geoman.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="submit.css">
+</head>
+<body>
+<header class="top"><img src="../icons/icon.svg" alt=""><h1>Add information</h1>
+  <nav><a href="submit.html" class="active">Add information</a><a href="jobs.html">Review queue</a><a href="options.html">Settings</a></nav>
+</header>
+
+<main class="grid">
+  <div class="col-form">
+    <section class="panel">
+      <h2>Information</h2>
+      <label for="title">Title <span class="hint">(optional)</span></label>
+      <input type="text" id="title" placeholder="e.g. Council meeting 12 Nov – new nature reserve">
+      <label for="text">Description / text <span class="hint">(required – the LLM integrates this into the wiki)</span></label>
+      <textarea id="text" rows="12" placeholder="Paste or write what you learned…"></textarea>
+      <label for="source">Source URL <span class="hint">(optional)</span></label>
+      <input type="url" id="source" placeholder="https://…">
+    </section>
+
+    <section class="panel">
+      <h2>Attachments</h2>
+      <div id="drop" class="dropzone" tabindex="0">
+        <div><b>Drop files here</b> or <button type="button" id="pick" class="small">choose files</button></div>
+        <div class="hint">Images (JPG, PNG, WebP, GIF, TIFF) · Geodata (GeoJSON, GPX, KML/KMZ, GeoPackage, Shapefile (.shp+.dbf+.shx+.prj or .zip), FlatGeobuf, GML, …)</div>
+        <input type="file" id="files" multiple class="hidden">
+      </div>
+      <div id="geoList" class="cards"></div>
+      <div id="imgList" class="cards"></div>
+      <div id="fileMsg"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Processing</h2>
+      <div class="row">
+        <div class="grow">
+          <label for="mapTitle">Map title <span class="hint">(optional, used if geodata is attached)</span></label>
+          <input type="text" id="mapTitle">
+        </div>
+        <div>
+          <label for="mode">After the LLM has finished</label>
+          <select id="mode">
+            <option value="review">Let me review the changes</option>
+            <option value="auto">Save to the wiki directly</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="primary" id="submit">Send to knowledge base</button>
+        <button id="reset" type="button">Clear</button>
+        <span id="busy" class="hidden"><span class="spinner"></span> Uploading…</span>
+      </div>
+      <div id="submitMsg"></div>
+    </section>
+  </div>
+
+  <div class="col-map">
+    <section class="panel sticky">
+      <div class="row">
+        <h2 class="grow" style="margin:0">Map <span class="hint">– draw points, lines and polygons (optional)</span></h2>
+      </div>
+      <form id="placeForm" class="row" style="margin:8px 0">
+        <input type="text" id="place" class="grow" placeholder="Go to place… (OpenStreetMap search)">
+        <button type="submit" class="small">Go</button>
+      </form>
+      <div id="map"></div>
+      <div id="shapesBox" class="hidden">
+        <label for="drawnTitle">Name for the drawn shapes layer</label>
+        <input type="text" id="drawnTitle" placeholder="Drawn shapes">
+        <div id="shapes"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="georef" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="georefTitle">
+  <div class="modal-box">
+    <div class="row modal-head">
+      <h2 id="georefTitle" class="grow" style="margin:0">Georeference image</h2>
+      <label class="row" style="margin:0;font-weight:400">Opacity <input type="range" id="opacity" min="0.1" max="1" step="0.05" value="0.7"></label>
+      <button id="grFit" class="small" title="Place the image in the middle of the current view">Reset placement</button>
+      <button id="grRemove" class="small danger">Remove georeference</button>
+      <button id="grCancel" class="small">Cancel</button>
+      <button id="grSave" class="small primary">Save</button>
+    </div>
+    <div class="hint" style="margin:4px 0 8px 0">Drag the four corner handles onto the matching places on the map. Drag the centre handle to move the whole image. Switch to the satellite layer at the top right if that helps.</div>
+    <div id="georefMap"></div>
+  </div>
+</div>
+
+<script src="../vendor/leaflet/leaflet.js"></script>
+<script src="../vendor/geoman/leaflet-geoman.min.js"></script>
+<script src="../lib/api.js"></script>
+<script src="../lib/pkdb-map.js"></script>
+<script src="submit.js"></script>
+</body>
+</html>

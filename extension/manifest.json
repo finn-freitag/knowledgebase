@@ -1,0 +1,151 @@
+{
+  "manifest_version": 3,
+  "name": "PKDB – Personal Knowledge Database",
+  "short_name": "PKDB",
+  "version": "0.1.0",
+  "description": "Shows results from your personal knowledge wiki in Google, DuckDuckGo, Ecosia & co. and adds text, images and geodata to it.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pkdb@finnfreitag.com",
+      "strict_min_version": "128.0"
+    }
+  },
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  },
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "alarms"
+  ],
+  "host_permissions": [
+    "*://*.google.com/*",
+    "*://*.google.de/*",
+    "*://*.google.at/*",
+    "*://*.google.ch/*",
+    "*://*.google.nl/*",
+    "*://*.google.be/*",
+    "*://*.google.fr/*",
+    "*://*.google.it/*",
+    "*://*.google.es/*",
+    "*://*.google.pl/*",
+    "*://*.google.dk/*",
+    "*://*.google.se/*",
+    "*://*.google.no/*",
+    "*://*.google.fi/*",
+    "*://*.google.cz/*",
+    "*://*.google.co.uk/*",
+    "*://*.google.ie/*",
+    "*://*.google.lu/*",
+    "*://*.google.pt/*",
+    "*://*.google.ca/*",
+    "*://*.google.com.au/*",
+    "*://duckduckgo.com/*",
+    "*://html.duckduckgo.com/*",
+    "*://*.ecosia.org/*",
+    "*://*.bing.com/*",
+    "*://*.startpage.com/*",
+    "*://search.brave.com/*",
+    "*://*.qwant.com/*"
+  ],
+  "optional_host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "scripts": [
+      "lib/api.js",
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_title": "PKDB",
+    "default_popup": "ui/popup.html",
+    "default_icon": "icons/icon.svg"
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.google.com/search*",
+        "*://*.google.de/search*",
+        "*://*.google.at/search*",
+        "*://*.google.ch/search*",
+        "*://*.google.nl/search*",
+        "*://*.google.be/search*",
+        "*://*.google.fr/search*",
+        "*://*.google.it/search*",
+        "*://*.google.es/search*",
+        "*://*.google.pl/search*",
+        "*://*.google.dk/search*",
+        "*://*.google.se/search*",
+        "*://*.google.no/search*",
+        "*://*.google.fi/search*",
+        "*://*.google.cz/search*",
+        "*://*.google.co.uk/search*",
+        "*://*.google.ie/search*",
+        "*://*.google.lu/search*",
+        "*://*.google.pt/search*",
+        "*://*.google.ca/search*",
+        "*://*.google.com.au/search*",
+        "*://duckduckgo.com/*",
+        "*://html.duckduckgo.com/*",
+        "*://*.ecosia.org/search*",
+        "*://*.bing.com/search*",
+        "*://*.startpage.com/*",
+        "*://search.brave.com/search*",
+        "*://*.qwant.com/*"
+      ],
+      "js": [
+        "content/engines.js",
+        "content/search.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "ui/mapview.html",
+        "ui/mapview.js",
+        "ui/mapview.css",
+        "lib/*",
+        "vendor/*",
+        "icons/*"
+      ],
+      "matches": [
+        "*://*.google.com/*",
+        "*://*.google.de/*",
+        "*://*.google.at/*",
+        "*://*.google.ch/*",
+        "*://*.google.nl/*",
+        "*://*.google.be/*",
+        "*://*.google.fr/*",
+        "*://*.google.it/*",
+        "*://*.google.es/*",
+        "*://*.google.pl/*",
+        "*://*.google.dk/*",
+        "*://*.google.se/*",
+        "*://*.google.no/*",
+        "*://*.google.fi/*",
+        "*://*.google.cz/*",
+        "*://*.google.co.uk/*",
+        "*://*.google.ie/*",
+        "*://*.google.lu/*",
+        "*://*.google.pt/*",
+        "*://*.google.ca/*",
+        "*://*.google.com.au/*",
+        "*://duckduckgo.com/*",
+        "*://html.duckduckgo.com/*",
+        "*://*.ecosia.org/*",
+        "*://*.bing.com/*",
+        "*://*.startpage.com/*",
+        "*://search.brave.com/*",
+        "*://*.qwant.com/*"
+      ]
+    }
+  ]
+}

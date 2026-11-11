@@ -1,0 +1,50 @@
+# Authelia configuration for PKDB. Rendered with the template filter from environment variables
+# (see entrypoint.sh). Secrets are generated on first start and stored in /config/secrets.
+server:
+  address: 'tcp://:9091/'
+
+log:
+  level: '{{ env "AUTH_LOG_LEVEL" }}'
+
+theme: 'auto'
+
+totp:
+  issuer: '{{ env "PKDB_HOST" }}'
+
+authentication_backend:
+  password_reset:
+    disable: true
+  file:
+    path: '/config/users_database.yml'
+    watch: true
+    password:
+      algorithm: 'argon2'
+
+access_control:
+  default_policy: 'deny'
+  rules:
+    - domain: '{{ env "PKDB_HOST" }}'
+      policy: '{{ env "AUTH_POLICY" }}'
+
+session:
+  name: 'pkdb_session'
+  expiration: '{{ env "AUTH_SESSION_EXPIRATION" }}'
+  inactivity: '{{ env "AUTH_SESSION_INACTIVITY" }}'
+  remember_me: '1M'
+  cookies:
+    - domain: '{{ env "AUTH_COOKIE_DOMAIN" }}'
+      authelia_url: 'https://{{ env "AUTH_HOST" }}'
+      default_redirection_url: 'https://{{ env "PKDB_HOST" }}'
+
+regulation:
+  max_retries: 5
+  find_time: '2m'
+  ban_time: '10m'
+
+storage:
+  local:
+    path: '/config/db.sqlite3'
+
+notifier:
+  filesystem:
+    filename: '/config/notification.txt'
